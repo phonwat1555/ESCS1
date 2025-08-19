@@ -87,6 +87,7 @@
                     <p class="text-gray-600 mt-1 text-base md:text-lg">สาขาวิชาคอมพิวเตอร์ธุรกิจ</p>
                     <p class="text-gray-600 mt-1 text-base md:text-lg">ศูนย์ส่งเสริมการเรียนรู้ระดับอำเภอเมืองนครราชสีมา</p>
                 </div>
+                
                 <div class="max-w-lg mx-auto rounded-xl p-8 bg-gradient-to-br from-purple-600 to-purple-800 shadow-2xl shadow-purple-500/40 transition-all duration-300 hover:-translate-y-1">
                     <h3 class="text-2xl font-bold text-center text-white mb-6 tracking-wide">ค้นหาด้วยรหัสนักศึกษา</h3>
                     <div class="space-y-4">
@@ -104,7 +105,18 @@
                         </button>
                     </div>
                 </div>
-                <div class="text-center mt-12 text-sm text-gray-500">
+
+                <!-- Map Button -->
+                <div class="text-center mt-10">
+                    <a href="https://maps.app.goo.gl/3vhGeb9LaGK17ocN9" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center bg-blue-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg shadow-blue-500/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 16.382V5.618a1 1 0 00-1.447-.894L15 7m-6 13v-6.5m6 3.5V7" />
+                        </svg>
+                        <span>นำทางไปสนามสอบ</span>
+                    </a>
+                </div>
+
+                <div class="text-center mt-10 text-sm text-gray-500">
                     <p>พัฒนาโดย ศูนย์ส่งเสริมการเรียนรู้ระดับอำเภอเมืองนครราชสีมา</p>
                 </div>
             </div>
@@ -203,17 +215,30 @@
             actionButtonsContainer.className = 'mt-8 text-center no-print';
             actionButtonsContainer.innerHTML = `<div class="flex flex-wrap gap-3 justify-center">
                 <button id="newSearchButton" class="bg-gray-500 text-white font-bold px-5 py-2.5 rounded-lg hover:bg-gray-600 transition shadow-md flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>ค้นหาใหม่</button>
+                <button id="printDirectlyButton" class="bg-amber-500 text-white font-bold px-5 py-2.5 rounded-lg hover:bg-amber-600 transition shadow-md flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v6a2 2 0 002 2h1v-4a1 1 0 011-1h8a1 1 0 011 1v4h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" /></svg>สั่งพิมพ์เอกสาร</button>
                 <button id="showExamButton" class="bg-purple-600 text-white font-bold px-5 py-2.5 rounded-lg hover:bg-purple-700 transition shadow-md flex items-center">ดูตารางสอบ<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></button>
             </div>`;
             resultView.appendChild(actionButtonsContainer);
             
             document.getElementById('newSearchButton').addEventListener('click', showSearchView);
             document.getElementById('showExamButton').addEventListener('click', () => appendExamSchedule(student));
+            document.getElementById('printDirectlyButton').addEventListener('click', () => {
+                appendExamSchedule(student);
+                // A short delay to ensure DOM is updated before printing
+                setTimeout(() => {
+                    printSchedule();
+                }, 100);
+            });
             
             resultView.classList.add('visible');
         }
 
         function appendExamSchedule(student) {
+            // Prevent adding the section if it already exists
+            if (document.getElementById('exam-section')) {
+                return;
+            }
+
             const printableWrapper = document.getElementById('printableArea');
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = `${generateExamTable(student)}${generateInstructions()}`;
@@ -345,4 +370,4 @@
     </script>
 
 </body>
-</ht
+</html>
